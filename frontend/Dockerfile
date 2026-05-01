@@ -18,7 +18,8 @@ COPY controllers  ./controllers
 COPY services     ./services
 COPY store        ./store
 COPY utils        ./utils
-COPY assets       ./assets
+COPY components    ./components
+COPY assets        ./assets
 COPY public       ./public
 # Nuxt build → self-contained server in .output/
 RUN bun run build

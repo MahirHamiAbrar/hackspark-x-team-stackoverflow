@@ -1,9 +1,16 @@
 import { Router } from 'express';
+import { createProxyMiddleware, fixRequestBody } from 'http-proxy-middleware';
+import { config } from '../config.js';
 
 const router = Router();
 
-router.all('/{*splat}', (req, res) => {
-  res.status(501).json({ error: 'Analytics service routes not implemented yet' });
-});
+router.use('/', createProxyMiddleware({
+  target: config.services.analytics,
+  changeOrigin: true,
+  pathRewrite: (path, req) => req.originalUrl,
+  on: {
+    proxyReq: fixRequestBody,
+  },
+}));
 
 export default router;
