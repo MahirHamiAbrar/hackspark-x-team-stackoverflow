@@ -11,7 +11,6 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY package.json bun.lock ./
 # Copy all source files (including root index.js imported by controllers)
 COPY app.vue nuxt.config.ts tsconfig.json index.js ./
-COPY app          ./app
 COPY pages        ./pages
 COPY layouts      ./layouts
 COPY components   ./components
