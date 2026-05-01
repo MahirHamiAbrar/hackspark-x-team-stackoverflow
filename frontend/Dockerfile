@@ -14,10 +14,12 @@ COPY app.vue nuxt.config.ts tsconfig.json index.js ./
 COPY app          ./app
 COPY pages        ./pages
 COPY layouts      ./layouts
+COPY components   ./components
 COPY controllers  ./controllers
 COPY services     ./services
 COPY store        ./store
 COPY utils        ./utils
+COPY assets       ./assets
 COPY public       ./public
 # Nuxt build → self-contained server in .output/
 RUN bun run build
