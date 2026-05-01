@@ -151,13 +151,13 @@ const handleLogout = async () => {
 <style scoped>
 .dashboard-container {
   min-height: 100vh;
-  background: #f5f5f5;
+  background: #FFFFE3;
   display: flex;
   flex-direction: column;
 }
 
 .navbar {
-  background: white;
+  background: #CBCBCB;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   position: sticky;
   top: 0;
@@ -176,7 +176,7 @@ const handleLogout = async () => {
 .logo {
   font-size: 24px;
   font-weight: 700;
-  color: #667eea;
+  color: #6D81D3;
   margin: 0;
 }
 
@@ -188,22 +188,22 @@ const handleLogout = async () => {
 
 .nav-links a {
   text-decoration: none;
-  color: #333;
+  color: #4A4A4A;
   font-weight: 500;
   transition: color 0.3s;
 }
 
 .nav-links a:hover {
-  color: #667eea;
+  color: #6D81D3;
 }
 
 .user-info {
-  color: #666;
+  color: #4A4A4A;
   font-weight: 500;
 }
 
 .btn-logout {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #6D81D3 0%, #4A4A4A 100%);
   color: white;
   border: none;
   padding: 8px 16px;
@@ -225,7 +225,7 @@ const handleLogout = async () => {
 }
 
 .dashboard-content h1 {
-  color: #333;
+  color: #4A4A4A;
   margin-bottom: 30px;
 }
 
@@ -236,7 +236,7 @@ const handleLogout = async () => {
 }
 
 .card {
-  background: white;
+  background: #FFFFE3;
   padding: 25px;
   border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -244,14 +244,14 @@ const handleLogout = async () => {
 
 .card h2 {
   margin-top: 0;
-  color: #333;
-  border-bottom: 2px solid #667eea;
+  color: #4A4A4A;
+  border-bottom: 2px solid #6D81D3;
   padding-bottom: 10px;
 }
 
 .user-details p {
   margin: 10px 0;
-  color: #666;
+  color: #4A4A4A;
 }
 
 .no-data {
@@ -261,7 +261,7 @@ const handleLogout = async () => {
 }
 
 .no-data a {
-  color: #667eea;
+  color: #6D81D3;
   text-decoration: none;
   font-weight: 600;
 }
@@ -274,19 +274,19 @@ const handleLogout = async () => {
 
 .rental-item {
   padding: 12px;
-  background: #f9f9f9;
+  background: #CBCBCB;
   border-radius: 5px;
-  border-left: 3px solid #667eea;
+  border-left: 3px solid #6D81D3;
 }
 
 .rental-item h4 {
   margin: 0 0 8px 0;
-  color: #333;
+  color: #4A4A4A;
 }
 
 .rental-item p {
   margin: 4px 0;
-  color: #666;
+  color: #4A4A4A;
   font-size: 14px;
 }
 
@@ -302,19 +302,19 @@ const handleLogout = async () => {
   flex-direction: column;
   align-items: center;
   padding: 15px;
-  background: #f9f9f9;
+  background: #CBCBCB;
   border-radius: 5px;
 }
 
 .stat-value {
   font-size: 28px;
   font-weight: 700;
-  color: #667eea;
+  color: #6D81D3;
 }
 
 .stat-label {
   font-size: 12px;
-  color: #999;
+  color: #4A4A4A;
   margin-top: 5px;
   text-transform: uppercase;
 }
@@ -333,7 +333,7 @@ const handleLogout = async () => {
 
 .recommendation-item {
   padding: 12px;
-  background: #f9f9f9;
+  background: #CBCBCB;
   border-radius: 5px;
   display: flex;
   justify-content: space-between;
@@ -342,17 +342,17 @@ const handleLogout = async () => {
 
 .recommendation-item p {
   margin: 0;
-  color: #333;
+  color: #4A4A4A;
 }
 
 .price {
-  color: #667eea;
+  color: #6D81D3;
   font-weight: 600;
   font-size: 14px;
 }
 
 .footer {
-  background: #333;
+  background: #4A4A4A;
   color: white;
   text-align: center;
   padding: 20px;
