@@ -16,4 +16,3 @@ app.use((_req, res) => {
 app.listen(port, '0.0.0.0', () => {
 	console.log(`${serviceName} listening on 0.0.0.0:${port}`);
 });
-});
