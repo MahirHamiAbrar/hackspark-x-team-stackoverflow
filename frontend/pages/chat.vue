@@ -114,6 +114,8 @@
 
 <script setup>
 import { ref, onMounted, nextTick, watch } from 'vue';
+import { marked } from 'marked';
+import DOMPurify from 'dompurify';
 import { baseHandle } from '@/services/baseHandle.js';
 import API_CONFIG from '@/index.js';
 
@@ -151,16 +153,11 @@ function formatTime(ts) {
 
 function formatMessage(content) {
   if (!content) return '';
-  // Basic markdown-like formatting
-  let html = content
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-    .replace(/\*(.*?)\*/g, '<em>$1</em>')
-    .replace(/`(.*?)`/g, '<code>$1</code>')
-    .replace(/\n/g, '<br>');
-  return html;
+  const rawHtml = marked.parse(content);
+  if (typeof window !== 'undefined' && DOMPurify) {
+    return DOMPurify.sanitize(rawHtml);
+  }
+  return rawHtml;
 }
 
 async function scrollToBottom() {

@@ -57,7 +57,7 @@
               <h3>{{ product.name }}</h3>
               <p class="category">{{ product.category }}</p>
               <p class="price">${{ product.pricePerDay }}/day</p>
-              <NuxtLink :to="`/products/${product.id}`" class="btn-details">
+              <NuxtLink :to="`/availability?productId=${product.id}`" class="btn-details">
                 View Details
               </NuxtLink>
             </div>

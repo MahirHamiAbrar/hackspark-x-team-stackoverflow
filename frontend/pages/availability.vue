@@ -132,7 +132,8 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
 import { baseHandle } from '@/services/baseHandle.js';
 import API_CONFIG from '@/index.js';
 
@@ -144,6 +145,14 @@ const toDate = ref('');
 const result = ref(null);
 const isLoading = ref(false);
 const error = ref('');
+const route = useRoute();
+
+onMounted(() => {
+  const initialProductId = route.query.productId;
+  if (initialProductId) {
+    productId.value = String(initialProductId);
+  }
+});
 
 const isFormValid = computed(() => {
   return productId.value && fromDate.value && toDate.value;

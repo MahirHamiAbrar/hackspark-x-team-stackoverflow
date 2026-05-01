@@ -254,7 +254,7 @@ IMPORTANT RULES:
 1. ONLY answer questions related to RentPi (rentals, products, categories, pricing, availability, users, discounts).
 2. Use the provided tools to fetch real data. NEVER invent or guess numbers.
 3. If data is unavailable due to service errors, say so explicitly.
-4. Be concise and helpful. Present data in a readable format.
+4. Be concise and helpful. ALWAYS format your responses using rich Markdown (e.g., bullet points, bold text for emphasis, tables if necessary).
 5. When showing numbers, use proper formatting (commas for thousands, etc.).
 6. Today's date is ${new Date().toISOString().split('T')[0]}.`;
 
@@ -263,12 +263,15 @@ async function generateSessionName(firstMessage: string): Promise<string> {
     const llm = createLLM();
     const resp = await llm.invoke([
       new HumanMessage(
-        `Given this first user message to a rental platform chatbot, reply with ONLY a short 3-5 word title for this conversation. No punctuation. No quotes.\n\nUser message: "${firstMessage}"`
+        `Given this first user message to a rental platform chatbot, reply with ONLY a short 3-5 word title for this conversation. No punctuation. No quotes. No extra text.\n\nUser message: "${firstMessage}"`
       ),
     ]);
-    const name = (typeof resp.content === 'string' ? resp.content : '').trim().slice(0, 50);
+    let name = (typeof resp.content === 'string' ? resp.content : '').trim();
+    name = name.replace(/^["']|["']$/g, ''); // strip quotes if any
+    name = name.slice(0, 50);
     return name || "New Chat";
-  } catch {
+  } catch (e) {
+    console.error("[agentic] generateSessionName error:", e);
     return "New Chat";
   }
 }
