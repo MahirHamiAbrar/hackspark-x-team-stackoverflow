@@ -93,6 +93,7 @@ services:
       JWT_SECRET:        ${JWT_SECRET}
       CENTRAL_API_URL:   ${CENTRAL_API_URL}
       CENTRAL_API_TOKEN: ${CENTRAL_API_TOKEN}
+      POSTGRES_HOST:     postgres
     depends_on:
       postgres:
         condition: service_healthy
