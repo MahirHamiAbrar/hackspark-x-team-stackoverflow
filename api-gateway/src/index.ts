@@ -2,6 +2,7 @@ import express from 'express';
 import { config } from './config.js';
 import routes from './routes/index.js';
 import { errorHandler } from './middleware/errorHandler.js';
+import { corsMiddleware } from './middleware/cors.js';
 
 const app = express();
 
@@ -28,6 +29,9 @@ app.use((req: any, res, next) => {
   });
 });
 app.use(express.urlencoded({ extended: true }));
+
+// CORS Middleware - must be before routes
+app.use(corsMiddleware);
 
 // Main Router
 app.use('/', routes);

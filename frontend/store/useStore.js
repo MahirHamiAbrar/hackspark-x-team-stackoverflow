@@ -53,12 +53,13 @@ const useAuth = () => {
         email,
         password,
       });
-      
+
+      // Directly access the token and user from the response
       globalState.auth.token = response.token;
       globalState.auth.user = response.user;
       globalState.auth.isAuthenticated = true;
       baseHandle.setToken(response.token);
-      
+
       return response;
     } catch (error) {
       globalState.auth.error = error.message;
@@ -72,6 +73,16 @@ const useAuth = () => {
     try {
       globalState.auth.loading = true;
       const response = await baseHandle.post(API_CONFIG.ENDPOINTS.AUTH.REGISTER, userData);
+      
+      if (!response || !response.token || !response.user) {
+        throw new Error('Invalid response structure from server.');
+      }
+
+      globalState.auth.token = response.token;
+      globalState.auth.user = response.user;
+      globalState.auth.isAuthenticated = true;
+      baseHandle.setToken(response.token);
+      
       return response;
     } catch (error) {
       globalState.auth.error = error.message;
@@ -308,15 +319,40 @@ const useAnalytics = () => {
 };
 
 /**
+ * Initialize Store - Restore auth state from localStorage
+ */
+const initializeStore = () => {
+  if (typeof window === 'undefined') return; // Skip on server-side rendering
+
+  try {
+    const storedToken = localStorage.getItem(API_CONFIG.TOKEN_STORAGE_KEY);
+    if (storedToken) {
+      globalState.auth.token = storedToken;
+      globalState.auth.isAuthenticated = true;
+      baseHandle.setToken(storedToken);
+      console.log('[useStore] Auth token restored from localStorage');
+    }
+  } catch (error) {
+    console.warn('[useStore] Failed to restore auth from localStorage:', error);
+  }
+};
+
+/**
  * Main useStore composable - combines all modules
  */
 export const useStore = () => {
+  // Initialize auth state from localStorage on first use
+  if (globalState.auth.token === null && typeof window !== 'undefined') {
+    initializeStore();
+  }
+
   return {
     state: globalState,
     auth: useAuth(),
     products: useProducts(),
     rentals: useRentals(),
     analytics: useAnalytics(),
+    initializeStore, // Export for manual initialization if needed
   };
 };
 

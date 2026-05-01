@@ -73,8 +73,8 @@ class BaseHandle {
    * Response interceptor - process response
    */
   async responseInterceptor(response) {
-    console.log(`[BaseHandle] RESPONSE: ${response.status} ${response.url}`);
-    return response.data;
+    console.log(`[BaseHandle] RESPONSE: Successfully received data`);
+    return response;
   }
 
   /**
