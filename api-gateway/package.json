@@ -1,0 +1,21 @@
+{
+  "name": "api-gateway",
+  "module": "src/index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "bun --env-file=../.env --watch src/index.ts",
+    "start": "bun --env-file=../.env src/index.ts",
+    "build": "bun build src/index.ts --outdir ./dist"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/express": "^5.0.6"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
