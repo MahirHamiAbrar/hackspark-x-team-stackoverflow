@@ -70,7 +70,7 @@ services:
       agentic-service:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:${GATEWAY_PORT:-8000}/status || exit 1"]
+      test: ["CMD-SHELL", "bun -e \"try { const r = await fetch('http://127.0.0.1:' + (process.env.PORT || '8000') + '/status'); if (!r.ok) process.exit(1); } catch { process.exit(1); }\""]
       interval: 15s
       timeout: 5s
       retries: 3
@@ -97,7 +97,7 @@ services:
       postgres:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:${USER_SERVICE_PORT:-8001}/status || exit 1"]
+      test: ["CMD-SHELL", "bun -e \"try { const r = await fetch('http://127.0.0.1:' + (process.env.PORT || '8001') + '/status'); if (!r.ok) process.exit(1); } catch { process.exit(1); }\""]
       interval: 15s
       timeout: 5s
       retries: 3
@@ -123,7 +123,7 @@ services:
       user-service:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:${RENTAL_SERVICE_PORT:-8002}/status || exit 1"]
+      test: ["CMD-SHELL", "bun -e \"try { const r = await fetch('http://127.0.0.1:' + (process.env.PORT || '8002') + '/status'); if (!r.ok) process.exit(1); } catch { process.exit(1); }\""]
       interval: 15s
       timeout: 5s
       retries: 3
@@ -145,7 +145,7 @@ services:
       CENTRAL_API_URL:   ${CENTRAL_API_URL}
       CENTRAL_API_TOKEN: ${CENTRAL_API_TOKEN}
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:${ANALYTICS_SERVICE_PORT:-8003}/status || exit 1"]
+      test: ["CMD-SHELL", "bun -e \"try { const r = await fetch('http://127.0.0.1:' + (process.env.PORT || '8003') + '/status'); if (!r.ok) process.exit(1); } catch { process.exit(1); }\""]
       interval: 15s
       timeout: 5s
       retries: 3
@@ -178,7 +178,7 @@ services:
       rental-service:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:${AGENTIC_SERVICE_PORT:-8004}/status || exit 1"]
+      test: ["CMD-SHELL", "bun -e \"try { const r = await fetch('http://127.0.0.1:' + (process.env.PORT || '8004') + '/status'); if (!r.ok) process.exit(1); } catch { process.exit(1); }\""]
       interval: 15s
       timeout: 5s
       retries: 3
@@ -206,7 +206,7 @@ services:
       api-gateway:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:${FRONTEND_PORT:-3000}/ || exit 1"]
+      test: ["CMD-SHELL", "bun -e \"try { const r = await fetch('http://127.0.0.1:' + (process.env.PORT || '3000') + '/'); if (!r.ok) process.exit(1); } catch { process.exit(1); }\""]
       interval: 15s
       timeout: 5s
       retries: 3
