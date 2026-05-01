@@ -115,6 +115,6 @@ app.get('/users/me', async (req, res) => {
   }
 });
 
-app.listen(port, () => {
-  console.log(`User service listening on port ${port}`);
+app.listen(Number(port), '0.0.0.0', () => {
+  console.log(`user-service listening on 0.0.0.0:${port}`);
 });

@@ -55,6 +55,6 @@ app.get('/status', async (req: Request, res: Response) => {
   });
 });
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+app.listen(Number(port), '0.0.0.0', () => {
+  console.log(`api-gateway listening on 0.0.0.0:${port}`);
 });

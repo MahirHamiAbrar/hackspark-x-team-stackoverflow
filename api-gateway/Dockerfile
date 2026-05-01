@@ -1,35 +1,30 @@
-FROM oven/bun:canary-slim AS base
-
+# ── Stage 1: install production deps ─────────────────────────────────────────
+FROM oven/bun:1.1.13-slim AS deps
 WORKDIR /usr/src/app
+COPY package.json bun.lock ./
+RUN bun install --frozen-lockfile --production
 
-# install with --production (exclude devDependencies)
-FROM base AS deps
-RUN mkdir -p /temp/prod
-COPY package.json bun.lock /temp/prod/
-RUN cd /temp/prod && bun install --frozen-lockfile --production
+# ── Stage 2: compile TypeScript → single JS bundle ───────────────────────────
+FROM oven/bun:1.1.13-slim AS build
+WORKDIR /usr/src/app
+COPY package.json bun.lock ./
+RUN bun install --frozen-lockfile
+COPY src ./src
+RUN bun build src/index.ts --outdir dist --target bun
 
-# copy node_modules from temp directory
-# then copy all (non-ignored) project files into the image
-FROM base AS prerelease
-COPY --from=deps /temp/dev/node_modules node_modules
-COPY . .
-
-# [optional] tests & build
+# ── Stage 3: lean runtime image ───────────────────────────────────────────────
+FROM oven/bun:1.1.13-slim AS runtime
+WORKDIR /usr/src/app
 ENV NODE_ENV=production
-# RUN bun test
-RUN bun run build
+ARG PORT=8000
+ENV PORT=$PORT
 
-# copy production dependencies and source code into final image
-# FROM base AS release
-# COPY --from=install /temp/prod/node_modules node_modules
-# COPY --from=prerelease /usr/src/app/index.ts .
-# COPY --from=prerelease /usr/src/app/package.json .
+COPY --from=deps  /usr/src/app/node_modules ./node_modules
+COPY --from=build /usr/src/app/dist         ./dist
+COPY package.json ./
 
-# run the app
 USER bun
-EXPOSE 8000/tcp
-ENTRYPOINT [ "bun", "run", "index.ts" ]
-
-# quick healthcheck
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost:3000/status || exit 1
+EXPOSE ${PORT}
+HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
+  CMD bun -e "try { const r = await fetch('http://127.0.0.1:' + (process.env.PORT || '8000') + '/status'); if (!r.ok) process.exit(1); } catch { process.exit(1); }"
+CMD ["bun", "./dist/index.js"]
