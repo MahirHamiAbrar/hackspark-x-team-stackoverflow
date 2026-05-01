@@ -7,6 +7,7 @@ import { productRoutes } from "./routes/product.routes";
 
 const CENTRAL_API_URL = process.env.CENTRAL_API_URL || "https://technocracy.brittoo.xyz";
 const CENTRAL_API_TOKEN = process.env.CENTRAL_API_TOKEN || "";
+const TARGET_API_URL = CENTRAL_API_URL;
 
 const app = express();
 
@@ -139,9 +140,6 @@ app.get("/status", (_req, res) => {
 // Proxy routes
 app.use("/products", productRoutes);
 
-// const TARGET_API_URL = "http://172.20.10.12:4000";
-const TARGET_API_URL = process.env.CENTRAL_API_URL || "https://technocracy.brittoo.xyz";
-const CENTRAL_API_TOKEN = process.env.CENTRAL_API_TOKEN;
 
 // MinHeap for optimized Top K queries
 class MinHeap {
