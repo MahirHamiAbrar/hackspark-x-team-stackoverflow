@@ -35,37 +35,40 @@ const API_CONFIG = {
       PROFILE: '/users/me',
     },
 
-    // Rental Service
+    // Rental Service (proxied via gateway /rentals/)
     PRODUCTS: {
-      LIST: '/api/products',
-      GET: '/api/products/:id',
-      SEARCH: '/api/products/search',
-      CATEGORIES: '/api/products/categories',
+      LIST: '/rentals/products',
+      GET: '/rentals/products/:id',
+      SEARCH: '/rentals/products/search',
+      CATEGORIES: '/rentals/products/categories',
+      AVAILABILITY: '/rentals/products/:id/availability',
     },
 
     RENTALS: {
-      LIST: '/api/rentals',
-      GET: '/api/rentals/:id',
-      CREATE: '/api/rentals',
-      CANCEL: '/api/rentals/:id/cancel',
-      HISTORY: '/api/users/rental-history',
+      LIST: '/rentals',
+      GET: '/rentals/:id',
+      CREATE: '/rentals',
+      CANCEL: '/rentals/:id/cancel',
+      HISTORY: '/users/rental-history',
+      KTH_BUSIEST: '/rentals/kth-busiest-date',
+      FREE_STREAK: '/rentals/products/:id/free-streak',
+      MERGED_FEED: '/rentals/merged-feed',
+      TOP_CATEGORIES: '/rentals/users/:id/top-categories',
     },
 
-    // Analytics Service
+    // Analytics Service (proxied via gateway /analytics/)
     ANALYTICS: {
-      TRENDS: '/api/analytics/trends',
-      STATS: '/api/analytics/stats',
-      RECOMMENDATIONS: '/api/analytics/recommendations',
-      SURGE: '/api/analytics/surge-pricing',
+      PEAK_WINDOW: '/analytics/peak-window',
+      SURGE_DAYS: '/analytics/surge-days',
+      RECOMMENDATIONS: '/analytics/recommendations',
     },
 
-    // Central API (via api-gateway)
-    CENTRAL: {
-      CATEGORIES: '/api/central/categories',
-      USERS: '/api/central/users/:id',
-      PRODUCTS: '/api/central/products',
-      RENTALS: '/api/central/rentals',
-      RENTALS_STATS: '/api/central/rentals/stats',
+    // Chat / Agentic Service (proxied via gateway /chat/)
+    CHAT: {
+      SEND: '/chat',
+      SESSIONS: '/chat/sessions',
+      HISTORY: '/chat/:sessionId/history',
+      DELETE: '/chat/:sessionId',
     },
   },
 

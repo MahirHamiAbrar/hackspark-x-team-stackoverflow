@@ -6,6 +6,10 @@
         <div class="nav-group pages-group">
           <NuxtLink to="/" class="nav-link">Home</NuxtLink>
           <NuxtLink to="/products" class="nav-link">Products</NuxtLink>
+          <NuxtLink to="/trending" class="nav-link">Trending</NuxtLink>
+          <NuxtLink to="/availability" class="nav-link">Availability</NuxtLink>
+          <NuxtLink to="/surge" class="nav-link">Surge</NuxtLink>
+          <NuxtLink to="/chat" class="nav-link">Chat</NuxtLink>
           <NuxtLink v-if="isAuthenticated" to="/dashboard" class="nav-link">Dashboard</NuxtLink>
         </div>
       </div>
