@@ -5,15 +5,135 @@ const port = Number(process.env.PORT || 8002);
 
 import { productRoutes } from "./routes/product.routes";
 
+const CENTRAL_API_URL = process.env.CENTRAL_API_URL || "https://technocracy.brittoo.xyz";
+const CENTRAL_API_TOKEN = process.env.CENTRAL_API_TOKEN || "";
+
 const app = express();
 
 app.use((req, res, next) => {
     console.log("RECEIVED:", req.method, req.url, req.originalUrl);
     next();
 });
+app.use(express.json());
 
+// ─── Central API helper ──────────────────────────────────────────────────────
+async function centralFetch(path: string): Promise<any> {
+  const res = await fetch(`${CENTRAL_API_URL}${path}`, {
+    headers: { Authorization: `Bearer ${CENTRAL_API_TOKEN}` },
+  });
+  if (!res.ok) {
+    const body = await res.text();
+    throw Object.assign(new Error(body), { status: res.status });
+  }
+  return res.json();
+}
+
+// ─── Rental record shape ─────────────────────────────────────────────────────
+interface Rental {
+  id: number;
+  productId: number;
+  ownerId: number;
+  renterId: number;
+  rentalStart: string;
+  rentalEnd: string;
+  discountPercent: number;
+}
+
+// ─── Fetch ALL rentals for a product (paginated) ─────────────────────────────
+async function fetchAllRentalsForProduct(productId: number): Promise<Rental[]> {
+  const all: Rental[] = [];
+  let page = 1;
+  while (true) {
+    const data = await centralFetch(`/api/data/rentals?product_id=${productId}&page=${page}&limit=100`);
+    if (!data.data || data.data.length === 0) break;
+    all.push(...data.data);
+    if (data.data.length < 100) break;
+    page++;
+  }
+  // The Central API returns already-sorted results (chronological per product)
+  all.sort((a, b) => a.rentalStart.localeCompare(b.rentalStart));
+  return all;
+}
+
+// ─── K-way merge (pair-wise divide and conquer, O(N·K·log K)) ────────────────
+// Merges two sorted arrays of rentals by rentalStart
+function mergeTwoSorted(a: Rental[], b: Rental[]): Rental[] {
+  const result: Rental[] = [];
+  let i = 0, j = 0;
+  while (i < a.length && j < b.length) {
+    if (a[i].rentalStart <= b[j].rentalStart) {
+      result.push(a[i++]);
+    } else {
+      result.push(b[j++]);
+    }
+  }
+  while (i < a.length) result.push(a[i++]);
+  while (j < b.length) result.push(b[j++]);
+  return result;
+}
+
+// Merge K sorted lists recursively (divide and conquer)
+function mergeKSorted(lists: Rental[][]): Rental[] {
+  if (lists.length === 0) return [];
+  if (lists.length === 1) return lists[0];
+  const mid = Math.floor(lists.length / 2);
+  const left = mergeKSorted(lists.slice(0, mid));
+  const right = mergeKSorted(lists.slice(mid));
+  return mergeTwoSorted(left, right);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// P12: GET /rentals/merged-feed
+// ─────────────────────────────────────────────────────────────────────────────
+app.get("/rentals/merged-feed", async (req, res) => {
+  const { productIds: productIdsStr, limit: limitStr = "30" } = req.query as Record<string, string>;
+  const limit = Number(limitStr);
+
+  // Validate limit
+  if (!Number.isInteger(limit) || limit < 1 || limit > 100) {
+    return res.status(400).json({ error: "limit must be a positive integer, max 100" });
+  }
+
+  // Validate productIds
+  if (!productIdsStr) {
+    return res.status(400).json({ error: "productIds is required" });
+  }
+  const rawIds = productIdsStr.split(",").map((s) => s.trim());
+  if (rawIds.length < 1 || rawIds.length > 10) {
+    return res.status(400).json({ error: "productIds must be 1–10 comma-separated integers" });
+  }
+  if (!rawIds.every((id) => /^\d+$/.test(id))) {
+    return res.status(400).json({ error: "productIds must be integers" });
+  }
+
+  // Deduplicate
+  const productIds = [...new Set(rawIds.map(Number))];
+
+  try {
+    // Fetch all rental lists in parallel
+    const rentalLists = await Promise.all(
+      productIds.map((id) => fetchAllRentalsForProduct(id))
+    );
+
+    // K-way merge
+    const merged = mergeKSorted(rentalLists);
+    const feed = merged.slice(0, limit).map((r) => ({
+      rentalId: r.id,
+      productId: r.productId,
+      rentalStart: r.rentalStart.slice(0, 10),
+      rentalEnd: r.rentalEnd.slice(0, 10),
+    }));
+
+    return res.json({ productIds, limit, feed });
+  } catch (err: any) {
+    console.error("P12 error:", err);
+    return res.status(err.status || 502).json({ error: err.message });
+  }
+});
+
+// ─── Status ──────────────────────────────────────────────────────────────────
 app.get("/status", (_req, res) => {
-	res.json({ service: serviceName, status: "OK" });
+  res.json({ service: serviceName, status: "OK" });
 });
 
 // Proxy routes
@@ -227,9 +347,9 @@ app.get('/users/:id/top-categories', async (req, res) => {
 });
 
 app.use((_req, res) => {
-	res.status(404).send("Not Found");
+  res.status(404).send("Not Found");
 });
 
-app.listen(port, '0.0.0.0', () => {
-	console.log(`${serviceName} listening on 0.0.0.0:${port}`);
+app.listen(port, "0.0.0.0", () => {
+  console.log(`${serviceName} listening on 0.0.0.0:${port}`);
 });
