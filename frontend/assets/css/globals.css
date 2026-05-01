@@ -1,0 +1,148 @@
+:root {
+  /* Default (Dark Mode) - Cyberpunk Palette */
+  --bg-main: #0f172a;
+  --bg-secondary: #020617;
+  --neon-cyan: #22d3ee;
+  --neon-cyan-glow: rgba(34, 211, 238, 0.5);
+  
+  /* Glassmorphism */
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-blur: blur(12px);
+  
+  /* Text */
+  --text-main: #f8fafc;
+  --text-dim: #94a3b8;
+  
+  /* Notch Background */
+  --notch-bg: #1e293b;
+
+  /* Background Image */
+  --bg-image: url('~/assets/images/wall.png');
+
+  /* Background Gradients */
+  --grad-1: rgba(34, 211, 238, 0.05);
+  --grad-2: rgba(34, 211, 238, 0.02); /* Switched to cyan */
+
+  /* Transitions */
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+}
+
+.light-mode {
+  /* Light Mode - Frosted Neon Palette */
+  --bg-main: #f8fafc;
+  --bg-secondary: #f1f5f9;
+  --neon-cyan: #0891b2; /* Darker cyan for contrast */
+  --neon-cyan-glow: rgba(8, 145, 178, 0.2);
+  
+  /* Glassmorphism */
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(0, 0, 0, 0.05);
+  --glass-blur: blur(10px);
+  
+  /* Text */
+  --text-main: #0f172a;
+  --text-dim: #475569;
+
+  /* Notch Background */
+  --notch-bg: #e2e8f0;
+
+  /* Background Image */
+  --bg-image: url('~/assets/images/wall-light.png');
+
+  /* Background Gradients */
+  --grad-1: rgba(8, 145, 178, 0.08);
+  --grad-2: rgba(8, 145, 178, 0.04); /* Switched to cyan */
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  min-height: 100vh;
+  line-height: 1.5;
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+  
+  /* Radial Glows */
+  background-image: 
+    radial-gradient(circle at 20% 30%, var(--grad-1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, var(--grad-2) 0%, transparent 50%);
+  background-attachment: fixed;
+}
+
+/* Textured Background Layer with Blur and Opacity */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: var(--bg-image);
+  background-size: cover;
+  background-position: center;
+  z-index: -1;
+  filter: blur(4px);
+  opacity: var(--bg-opacity);
+  pointer-events: none;
+  transition: background-image var(--transition-normal), opacity var(--transition-normal);
+}
+
+/* Theme-specific visibility controls */
+:root {
+  --bg-opacity: 0.25; /* Subtle in dark mode */
+}
+
+.light-mode {
+  --bg-opacity: 0.35; /* Balanced for light mode visibility */
+}
+
+/* Global Glass Utility */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+}
+
+.neon-border-cyan {
+  border: 1px solid var(--neon-cyan);
+  box-shadow: 0 0 10px var(--neon-cyan-glow);
+}
+
+.neon-text-cyan {
+  color: var(--neon-cyan);
+  text-shadow: 0 0 8px var(--neon-cyan-glow);
+}
+
+/* Button Reset & Base */
+button, .btn {
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+  transition: all var(--transition-normal);
+}
+
+/* Input Global Style */
+input, textarea, select {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  color: var(--text-main);
+  padding: 12px 16px;
+  outline: none;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+input:focus {
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 8px var(--neon-cyan-glow);
+}

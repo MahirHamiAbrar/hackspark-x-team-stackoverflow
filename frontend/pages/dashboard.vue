@@ -1,17 +1,5 @@
 <template>
   <div class="dashboard-container">
-    <nav class="navbar">
-      <div class="nav-content">
-        <h1 class="logo">RentPi</h1>
-        <div class="nav-links">
-          <NuxtLink to="/">Home</NuxtLink>
-          <NuxtLink to="/products">Products</NuxtLink>
-          <span class="user-info">{{ user?.name }}</span>
-          <button @click="handleLogout" class="btn-logout">Logout</button>
-        </div>
-      </div>
-    </nav>
-
     <div class="dashboard-content">
       <h1>Dashboard</h1>
 
@@ -137,174 +125,119 @@ onMounted(async () => {
     isLoadingRecommendations.value = false;
   }
 });
-
-const handleLogout = async () => {
-  try {
-    await userController.logout();
-    await router.push('/');
-  } catch (error) {
-    console.error('Logout failed:', error);
-  }
-};
 </script>
 
 <style scoped>
 .dashboard-container {
   min-height: 100vh;
-  background: #FFFFE3;
   display: flex;
   flex-direction: column;
-}
-
-.navbar {
-  background: #ffffff;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  padding: 10px 0;
-}
-
-.nav-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 15px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.logo {
-  font-size: 28px;
-  font-weight: 800;
-  color: #6D81D3;
-  margin: 0;
-  letter-spacing: -0.05em;
-}
-
-.nav-links {
-  display: flex;
-  gap: 20px;
-  align-items: center;
-}
-
-.nav-links a {
-  text-decoration: none;
-  color: #4A4A4A;
-  font-weight: 500;
-  transition: color 0.3s;
-}
-
-.nav-links a:hover {
-  color: #6D81D3;
-}
-
-.user-info {
-  color: #4A4A4A;
-  font-weight: 500;
-}
-
-.btn-logout {
-  background: linear-gradient(135deg, #6D81D3 0%, #4A4A4A 100%);
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: transform 0.2s;
-}
-
-.btn-logout:hover {
-  transform: translateY(-2px);
 }
 
 .dashboard-content {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 40px 20px;
+  padding: 60px 20px;
   width: 100%;
   flex: 1;
 }
 
 .dashboard-content h1 {
-  color: #4A4A4A;
-  margin-bottom: 30px;
+  color: var(--text-main);
+  margin-bottom: 40px;
+  font-size: 36px;
+  font-weight: 800;
 }
 
 .dashboard-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 30px;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 32px;
 }
 
 .card {
-  background: #ffffff;
-  padding: 30px;
-  border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
-  border: 1px solid rgba(0, 0, 0, 0.02);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  padding: 32px;
+  border-radius: 24px;
+  border: 1px solid var(--glass-border);
+  transition: all var(--transition-normal);
 }
 
 .card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+  transform: translateY(-8px);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 20px 40px -20px rgba(0,0,0,0.5);
 }
 
 .card h2 {
   margin-top: 0;
-  color: #4A4A4A;
-  border-bottom: 2px solid rgba(109, 129, 211, 0.2);
-  padding-bottom: 15px;
-  margin-bottom: 20px;
+  color: var(--text-main);
+  border-bottom: 1px solid var(--glass-border);
+  padding-bottom: 20px;
+  margin-bottom: 24px;
   font-weight: 700;
+  font-size: 20px;
 }
 
 .user-details p {
-  margin: 10px 0;
-  color: #4A4A4A;
+  margin: 12px 0;
+  color: var(--text-dim);
+  font-size: 15px;
+}
+
+.user-details strong {
+  color: var(--text-main);
+  margin-right: 8px;
 }
 
 .no-data {
-  color: #999;
+  color: var(--text-dim);
   text-align: center;
-  padding: 20px;
+  padding: 40px 20px;
 }
 
 .no-data a {
-  color: #6D81D3;
+  color: var(--neon-cyan);
   text-decoration: none;
   font-weight: 600;
+  transition: text-shadow var(--transition-fast);
+}
+
+.no-data a:hover {
+  text-shadow: 0 0 8px var(--neon-cyan-glow);
 }
 
 .rentals-list {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 16px;
 }
 
 .rental-item {
-  padding: 16px;
-  background: #ffffff;
-  border: 1px solid #eaeaea;
-  border-radius: 8px;
-  border-left: 4px solid #6D81D3;
-  transition: all 0.2s ease;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  border-left: 4px solid var(--neon-cyan);
+  transition: all var(--transition-fast);
 }
 
 .rental-item:hover {
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateX(5px);
 }
 
 .rental-item h4 {
   margin: 0 0 8px 0;
-  color: #4A4A4A;
+  color: var(--text-main);
   font-size: 16px;
 }
 
 .rental-item p {
   margin: 4px 0;
-  color: #888;
+  color: var(--text-dim);
   font-size: 14px;
 }
 
@@ -312,79 +245,87 @@ const handleLogout = async () => {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
-  padding-top: 10px;
 }
 
 .stat {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
-  background: #ffffff;
-  border: 1px solid #eaeaea;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  transition: all var(--transition-fast);
+}
+
+.stat:hover {
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 15px var(--neon-cyan-glow);
 }
 
 .stat-value {
   font-size: 32px;
   font-weight: 800;
-  color: #6D81D3;
-  margin-bottom: 5px;
+  color: var(--neon-cyan);
+  margin-bottom: 8px;
+  text-shadow: 0 0 10px var(--neon-cyan-glow);
 }
 
 .stat-label {
-  font-size: 13px;
-  color: #888;
+  font-size: 12px;
+  color: var(--text-dim);
   text-transform: uppercase;
   font-weight: 600;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.1em;
 }
 
 .loading {
   text-align: center;
-  padding: 30px;
-  color: #888;
+  padding: 40px;
+  color: var(--text-dim);
 }
 
 .recommendations-list {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 16px;
 }
 
 .recommendation-item {
-  padding: 16px;
-  background: #ffffff;
-  border: 1px solid #eaeaea;
-  border-radius: 8px;
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  transition: all 0.2s ease;
+  transition: all var(--transition-fast);
 }
 
 .recommendation-item:hover {
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 10px var(--neon-cyan-glow);
 }
 
 .recommendation-item p {
   margin: 0;
-  color: #4A4A4A;
+  color: var(--text-main);
   font-weight: 500;
 }
 
 .price {
-  color: #6D81D3;
+  color: var(--neon-cyan);
   font-weight: 700;
   font-size: 16px;
 }
 
 .footer {
-  background: #4A4A4A;
-  color: white;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(5px);
+  border-top: 1px solid var(--glass-border);
+  color: var(--text-dim);
   text-align: center;
-  padding: 20px;
+  padding: 40px;
   margin-top: auto;
 }
 
@@ -394,8 +335,7 @@ const handleLogout = async () => {
 
 @media (max-width: 768px) {
   .nav-links {
-    gap: 10px;
-    flex-wrap: wrap;
+    gap: 16px;
   }
 
   .dashboard-grid {

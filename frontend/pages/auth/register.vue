@@ -129,22 +129,24 @@ const handleRegister = async () => {
   align-items: center;
   min-height: 100vh;
   padding: 40px 20px;
-  background: #FFFFE3;
 }
 
 .auth-box {
-  background: #ffffff;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
   padding: 50px 40px;
-  border-radius: 16px;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+  border-radius: 24px;
+  border: 1px solid var(--glass-border);
   width: 100%;
   max-width: 480px;
-  border: 1px solid rgba(0,0,0,0.02);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 }
 
 h1 {
   text-align: center;
-  color: #4A4A4A;
+  color: var(--neon-cyan);
+  text-shadow: 0 0 10px var(--neon-cyan-glow);
   margin-bottom: 40px;
   font-size: 32px;
   font-weight: 800;
@@ -164,84 +166,91 @@ form {
 
 label {
   margin-bottom: 8px;
-  color: #4A4A4A;
+  color: var(--text-dim);
   font-weight: 600;
   font-size: 14px;
 }
 
 input {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
   padding: 14px 16px;
-  border: 1.5px solid #eaeaea;
-  border-radius: 8px;
+  color: var(--text-main);
   font-size: 15px;
-  transition: all 0.3s ease;
-  background: #fafafa;
+  transition: all var(--transition-normal);
 }
 
 input:focus {
   outline: none;
-  border-color: #6D81D3;
-  background: #ffffff;
-  box-shadow: 0 0 0 4px rgba(109, 129, 211, 0.15);
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 15px var(--neon-cyan-glow);
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .btn-register {
   padding: 14px;
-  background: #6D81D3;
-  color: white;
+  background: linear-gradient(135deg, var(--neon-cyan), #0891b2);
+  color: var(--bg-secondary);
   border: none;
-  border-radius: 8px;
+  border-radius: 12px;
   font-size: 16px;
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal);
   margin-top: 15px;
-  box-shadow: 0 4px 15px rgba(109, 129, 211, 0.3);
+  box-shadow: 0 0 20px var(--neon-cyan-glow);
 }
 
 .btn-register:hover:not(:disabled) {
   transform: translateY(-2px);
-  background: #5a6eb8;
-  box-shadow: 0 6px 20px rgba(109, 129, 211, 0.4);
+  box-shadow: 0 0 30px var(--neon-cyan);
+  filter: brightness(1.1);
 }
 
 .btn-register:disabled {
-  opacity: 0.7;
+  opacity: 0.5;
   cursor: not-allowed;
+  box-shadow: none;
 }
 
 .error-message {
-  color: #d32f2f;
+  color: #fb7185;
   font-size: 13px;
-  margin-top: 10px;
-  padding: 8px;
-  background-color: #ffebee;
-  border-radius: 5px;
+  margin-top: 15px;
+  padding: 10px;
+  background: rgba(251, 113, 133, 0.1);
+  border: 1px solid rgba(251, 113, 133, 0.2);
+  border-radius: 8px;
+  text-align: center;
 }
 
 .success-message {
-  color: #2e7d32;
+  color: #4ade80;
   font-size: 13px;
-  margin-top: 10px;
-  padding: 8px;
-  background-color: #e8f5e9;
-  border-radius: 5px;
+  margin-top: 15px;
+  padding: 10px;
+  background: rgba(74, 222, 128, 0.1);
+  border: 1px solid rgba(74, 222, 128, 0.2);
+  border-radius: 8px;
+  text-align: center;
 }
 
 .login-link {
   text-align: center;
-  margin-top: 20px;
-  color: #4A4A4A;
+  margin-top: 30px;
+  color: var(--text-dim);
   font-size: 14px;
 }
 
 .login-link a {
-  color: #6D81D3;
+  color: var(--neon-cyan);
   text-decoration: none;
   font-weight: 600;
+  transition: text-shadow var(--transition-fast);
 }
 
 .login-link a:hover {
-  text-decoration: underline;
+  text-shadow: 0 0 8px var(--neon-cyan-glow);
 }
 </style>
