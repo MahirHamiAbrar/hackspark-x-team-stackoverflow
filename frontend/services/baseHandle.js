@@ -119,7 +119,7 @@ class BaseHandle {
    * Make actual HTTP request
    */
   async makeRequest(config) {
-    const url = config.url.startsWith('http') ? config.url : `${this.baseURL}${config.url}`;
+    let url = config.url.startsWith('http') ? config.url : `${this.baseURL}${config.url}`;
     
     const fetchConfig = {
       method: config.method || 'GET',
