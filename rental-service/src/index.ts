@@ -104,6 +104,12 @@ app.get('/kth-busiest-date', async (req, res) => {
         const data = await response.json();
         const rentals = data.data || data || [];
 
+        console.log(`[kth-busiest] Total rentals fetched: ${rentals.length}`);
+        if (rentals.length > 0) {
+            console.log(`[kth-busiest] Sample rental:`, JSON.stringify(rentals[0]));
+            console.log(`[kth-busiest] fromDate=${fromDate}, toDate=${toDate}`);
+        }
+
         const dayCounts = new Map<string, number>();
 
         for (const r of rentals) {
