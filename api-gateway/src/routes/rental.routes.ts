@@ -1,9 +1,12 @@
 import { Router } from 'express';
+import { createProxyMiddleware } from 'http-proxy-middleware';
+import { config } from '../config.js';
 
 const router = Router();
 
-router.all('/{*splat}', (req, res) => {
-  res.status(501).json({ error: 'Rental service routes not implemented yet' });
-});
+router.use('/', createProxyMiddleware({
+  target: config.services.rental,
+  changeOrigin: true,
+}));
 
 export default router;
