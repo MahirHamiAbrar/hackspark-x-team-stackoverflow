@@ -128,29 +128,33 @@ const handleRegister = async () => {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #6D81D3 0%, #4A4A4A 100%);
+  padding: 40px 20px;
+  background: #FFFFE3;
 }
 
 .auth-box {
-  background: #FFFFE3;
-  padding: 40px;
-  border-radius: 10px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  background: #ffffff;
+  padding: 50px 40px;
+  border-radius: 16px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
   width: 100%;
-  max-width: 400px;
+  max-width: 480px;
+  border: 1px solid rgba(0,0,0,0.02);
 }
 
 h1 {
   text-align: center;
   color: #4A4A4A;
-  margin-bottom: 30px;
-  font-size: 28px;
+  margin-bottom: 40px;
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
 }
 
 form {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 20px;
 }
 
 .form-group {
@@ -159,41 +163,46 @@ form {
 }
 
 label {
-  margin-bottom: 6px;
+  margin-bottom: 8px;
   color: #4A4A4A;
   font-weight: 600;
   font-size: 14px;
 }
 
 input {
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  font-size: 14px;
-  transition: border-color 0.3s;
+  padding: 14px 16px;
+  border: 1.5px solid #eaeaea;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  background: #fafafa;
 }
 
 input:focus {
   outline: none;
   border-color: #6D81D3;
-  box-shadow: 0 0 0 3px rgba(109, 129, 211, 0.1);
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(109, 129, 211, 0.15);
 }
 
 .btn-register {
-  padding: 12px;
-  background: linear-gradient(135deg, #6D81D3 0%, #4A4A4A 100%);
+  padding: 14px;
+  background: #6D81D3;
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
-  transition: transform 0.2s;
-  margin-top: 10px;
+  transition: all 0.3s ease;
+  margin-top: 15px;
+  box-shadow: 0 4px 15px rgba(109, 129, 211, 0.3);
 }
 
 .btn-register:hover:not(:disabled) {
   transform: translateY(-2px);
+  background: #5a6eb8;
+  box-shadow: 0 6px 20px rgba(109, 129, 211, 0.4);
 }
 
 .btn-register:disabled {

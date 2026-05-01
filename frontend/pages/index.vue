@@ -118,14 +118,21 @@ definePageMeta({
 .btn-login {
   background: #6D81D3;
   color: white !important;
-  padding: 8px 16px;
-  border-radius: 5px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(109, 129, 211, 0.2);
+}
+
+.btn-login:hover {
+  background: #5a6eb8;
+  transform: translateY(-1px);
 }
 
 .hero {
   background: linear-gradient(135deg, #6D81D3 0%, #4A4A4A 100%);
   color: white;
-  padding: 100px 20px;
+  padding: 120px 20px;
   text-align: center;
   flex: 1;
 }
@@ -136,62 +143,71 @@ definePageMeta({
 }
 
 .hero h1 {
-  font-size: 48px;
-  margin-bottom: 15px;
+  font-size: 56px;
+  margin-bottom: 20px;
+  font-weight: 800;
 }
 
 .hero p {
-  font-size: 24px;
-  margin-bottom: 30px;
+  font-size: 20px;
+  margin-bottom: 40px;
   opacity: 0.9;
+  font-weight: 400;
 }
 
 .btn-primary {
   display: inline-block;
   background: #FFFFE3;
-  color: #6D81D3;
-  padding: 12px 30px;
-  border-radius: 5px;
+  color: #4A4A4A;
+  padding: 14px 32px;
+  border-radius: 8px;
   text-decoration: none;
-  font-weight: 600;
-  transition: transform 0.2s;
+  font-weight: 700;
+  font-size: 18px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
 
 .btn-primary:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  color: #6D81D3;
 }
 
 .features {
   max-width: 1200px;
-  margin: 60px auto;
+  margin: 80px auto;
   padding: 0 20px;
   width: 100%;
 }
 
 .features h2 {
-  font-size: 32px;
+  font-size: 36px;
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 50px;
   color: #4A4A4A;
+  font-weight: 800;
 }
 
 .features-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 30px;
 }
 
 .feature-card {
-  background: #FFFFE3;
-  padding: 30px;
-  border-radius: 10px;
+  background: #ffffff;
+  padding: 40px 30px;
+  border-radius: 16px;
   text-align: center;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(0,0,0,0.02);
 }
 
 .feature-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-8px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
 }
 
 .feature-icon {

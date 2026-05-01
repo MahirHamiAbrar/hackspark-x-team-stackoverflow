@@ -157,11 +157,12 @@ const handleLogout = async () => {
 }
 
 .navbar {
-  background: #CBCBCB;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   position: sticky;
   top: 0;
   z-index: 100;
+  padding: 10px 0;
 }
 
 .nav-content {
@@ -174,10 +175,11 @@ const handleLogout = async () => {
 }
 
 .logo {
-  font-size: 24px;
-  font-weight: 700;
+  font-size: 28px;
+  font-weight: 800;
   color: #6D81D3;
   margin: 0;
+  letter-spacing: -0.05em;
 }
 
 .nav-links {
@@ -231,22 +233,31 @@ const handleLogout = async () => {
 
 .dashboard-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 30px;
 }
 
 .card {
-  background: #FFFFE3;
-  padding: 25px;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.02);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
 }
 
 .card h2 {
   margin-top: 0;
   color: #4A4A4A;
-  border-bottom: 2px solid #6D81D3;
-  padding-bottom: 10px;
+  border-bottom: 2px solid rgba(109, 129, 211, 0.2);
+  padding-bottom: 15px;
+  margin-bottom: 20px;
+  font-weight: 700;
 }
 
 .user-details p {
@@ -273,27 +284,34 @@ const handleLogout = async () => {
 }
 
 .rental-item {
-  padding: 12px;
-  background: #CBCBCB;
-  border-radius: 5px;
-  border-left: 3px solid #6D81D3;
+  padding: 16px;
+  background: #ffffff;
+  border: 1px solid #eaeaea;
+  border-radius: 8px;
+  border-left: 4px solid #6D81D3;
+  transition: all 0.2s ease;
+}
+
+.rental-item:hover {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
 .rental-item h4 {
   margin: 0 0 8px 0;
   color: #4A4A4A;
+  font-size: 16px;
 }
 
 .rental-item p {
   margin: 4px 0;
-  color: #4A4A4A;
+  color: #888;
   font-size: 14px;
 }
 
 .stats {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 15px;
+  gap: 20px;
   padding-top: 10px;
 }
 
@@ -301,54 +319,65 @@ const handleLogout = async () => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 15px;
-  background: #CBCBCB;
-  border-radius: 5px;
+  padding: 20px;
+  background: #ffffff;
+  border: 1px solid #eaeaea;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
 }
 
 .stat-value {
-  font-size: 28px;
-  font-weight: 700;
+  font-size: 32px;
+  font-weight: 800;
   color: #6D81D3;
+  margin-bottom: 5px;
 }
 
 .stat-label {
-  font-size: 12px;
-  color: #4A4A4A;
-  margin-top: 5px;
+  font-size: 13px;
+  color: #888;
   text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.05em;
 }
 
 .loading {
   text-align: center;
-  padding: 20px;
-  color: #999;
+  padding: 30px;
+  color: #888;
 }
 
 .recommendations-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 15px;
 }
 
 .recommendation-item {
-  padding: 12px;
-  background: #CBCBCB;
-  border-radius: 5px;
+  padding: 16px;
+  background: #ffffff;
+  border: 1px solid #eaeaea;
+  border-radius: 8px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  transition: all 0.2s ease;
+}
+
+.recommendation-item:hover {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
 .recommendation-item p {
   margin: 0;
   color: #4A4A4A;
+  font-weight: 500;
 }
 
 .price {
   color: #6D81D3;
-  font-weight: 600;
-  font-size: 14px;
+  font-weight: 700;
+  font-size: 16px;
 }
 
 .footer {

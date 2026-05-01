@@ -28,11 +28,11 @@ const API_CONFIG = {
   ENDPOINTS: {
     // User Service
     AUTH: {
-      LOGIN: '/api/auth/login',
-      REGISTER: '/api/auth/register',
-      LOGOUT: '/api/auth/logout',
-      REFRESH: '/api/auth/refresh',
-      PROFILE: '/api/users/profile',
+      LOGIN: '/users/login',
+      REGISTER: '/users/register',
+      LOGOUT: '/users/logout',
+      REFRESH: '/users/refresh',
+      PROFILE: '/users/me',
     },
 
     // Rental Service
