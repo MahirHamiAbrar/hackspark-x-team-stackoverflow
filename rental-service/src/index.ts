@@ -19,6 +19,207 @@ app.get("/status", (_req, res) => {
 // Proxy routes
 app.use("/products", productRoutes);
 
+// const TARGET_API_URL = "http://172.20.10.12:4000";
+const TARGET_API_URL = process.env.CENTRAL_API_URL || "https://technocracy.brittoo.xyz";
+const CENTRAL_API_TOKEN = process.env.CENTRAL_API_TOKEN;
+
+// MinHeap for optimized Top K queries
+class MinHeap {
+    heap: { key: string, count: number }[];
+    constructor() { this.heap = []; }
+    push(item: { key: string, count: number }) {
+        this.heap.push(item);
+        this.up(this.heap.length - 1);
+    }
+    pop() {
+        const top = this.heap[0];
+        const bottom = this.heap.pop();
+        if (this.heap.length > 0 && bottom) {
+            this.heap[0] = bottom;
+            this.down(0);
+        }
+        return top;
+    }
+    up(i: number) {
+        while (i > 0) {
+            const p = Math.floor((i - 1) / 2);
+            if (this.heap[p].count <= this.heap[i].count) break;
+            [this.heap[p], this.heap[i]] = [this.heap[i], this.heap[p]];
+            i = p;
+        }
+    }
+    down(i: number) {
+        const l = this.heap.length;
+        while (i * 2 + 1 < l) {
+            let left = i * 2 + 1, right = i * 2 + 2, smallest = left;
+            if (right < l && this.heap[right].count < this.heap[left].count) smallest = right;
+            if (this.heap[i].count <= this.heap[smallest].count) break;
+            [this.heap[i], this.heap[smallest]] = [this.heap[smallest], this.heap[i]];
+            i = smallest;
+        }
+    }
+    size() { return this.heap.length; }
+}
+
+// P8: The Record Day
+app.get('/kth-busiest-date', async (req, res) => {
+    try {
+        const fromStr = req.query.from as string;
+        const toStr = req.query.to as string;
+        const kStr = req.query.k as string;
+
+        if (!fromStr || !toStr || !/^\d{4}-\d{2}$/.test(fromStr) || !/^\d{4}-\d{2}$/.test(toStr)) {
+            return res.status(400).json({ error: "from and to must be valid YYYY-MM strings" });
+        }
+        
+        const k = parseInt(kStr, 10);
+        if (isNaN(k) || k <= 0) {
+            return res.status(400).json({ error: "k must be a positive integer" });
+        }
+
+        const [fYear, fMonth] = fromStr.split('-').map(Number);
+        const [tYear, tMonth] = toStr.split('-').map(Number);
+        const monthsDiff = (tYear - fYear) * 12 + (tMonth - fMonth);
+        
+        if (monthsDiff < 0) {
+            return res.status(400).json({ error: "from must not be after to" });
+        }
+        if (monthsDiff > 11) {
+            return res.status(400).json({ error: "Max range is 12 months" });
+        }
+
+        const fromDate = `${fromStr}-01`;
+        const toDateObj = new Date(tYear, tMonth, 0); // last day of 'to' month
+        const toDate = `${toStr}-${String(toDateObj.getDate()).padStart(2, '0')}`;
+
+        const url = new URL(`${TARGET_API_URL}/api/data/rentals`);
+        const response = await fetch(url.toString(), {
+            headers: { 'Authorization': `Bearer ${CENTRAL_API_TOKEN}` }
+        });
+
+        if (!response.ok) {
+            return res.status(response.status).json({ error: "Failed to fetch rentals" });
+        }
+
+        const data = await response.json();
+        const rentals = data.data || data || [];
+
+        const dayCounts = new Map<string, number>();
+
+        for (const r of rentals) {
+            if (r.start <= toDate && r.end >= fromDate) {
+                const start = r.start < fromDate ? fromDate : r.start;
+                const end = r.end > toDate ? toDate : r.end;
+
+                let curr = new Date(start);
+                const endDate = new Date(end);
+
+                while (curr <= endDate) {
+                    const dStr = curr.toISOString().split('T')[0];
+                    dayCounts.set(dStr, (dayCounts.get(dStr) || 0) + 1);
+                    curr.setDate(curr.getDate() + 1);
+                }
+            }
+        }
+
+        const entries = Array.from(dayCounts.entries());
+        if (k > entries.length) {
+            return res.status(404).json({ error: "k exceeds total distinct dates available" });
+        }
+
+        // Optimized approach using MinHeap
+        const heap = new MinHeap();
+        for (const [date, count] of entries) {
+            heap.push({ key: date, count });
+            if (heap.size() > k) {
+                heap.pop();
+            }
+        }
+
+        // The top of the min-heap (size K) is the Kth largest element
+        const kth = heap.pop()!;
+
+        return res.json({
+            from: fromStr,
+            to: toStr,
+            k,
+            date: kth.key,
+            rentalCount: kth.count
+        });
+
+    } catch (err) {
+        console.error("Error computing kth busiest date:", err);
+        return res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+// P9: What Does This Renter Love?
+app.get('/users/:id/top-categories', async (req, res) => {
+    try {
+        const userId = req.params.id;
+        const kStr = req.query.k as string;
+        const k = parseInt(kStr, 10);
+        
+        if (isNaN(k) || k <= 0) return res.status(400).json({ error: "k must be a positive integer" });
+
+        const response = await fetch(`${TARGET_API_URL}/api/data/rentals`, {
+            headers: { 'Authorization': `Bearer ${CENTRAL_API_TOKEN}` }
+        });
+        
+        if (!response.ok) return res.status(response.status).json({ error: "Failed to fetch rentals" });
+        const data = await response.json();
+        const rentals = data.data || data || [];
+        
+        const userRentals = rentals.filter((r: any) => String(r.userId) === userId || String(r.renterId) === userId || String(r.ownerId) === userId);
+        
+        if (userRentals.length === 0) return res.json({ userId: Number(userId), topCategories: [] });
+
+        const productIds = Array.from(new Set(userRentals.map((r: any) => r.productId)));
+
+        const categoryCounts = new Map<string, number>();
+        const productsMap = new Map<number, any>();
+        
+        // Batch fetch products 50 at a time
+        for (let i = 0; i < productIds.length; i += 50) {
+            const batch = productIds.slice(i, i + 50);
+            const batchUrl = `${TARGET_API_URL}/api/data/products/batch?ids=${batch.join(',')}`;
+            const pRes = await fetch(batchUrl, { headers: { 'Authorization': `Bearer ${CENTRAL_API_TOKEN}` } });
+            if (pRes.ok) {
+                const pData = await pRes.json();
+                const prods = pData.data || pData || [];
+                for (const p of prods) productsMap.set(p.id, p);
+            }
+        }
+
+        for (const r of userRentals) {
+            const prod = productsMap.get(r.productId);
+            if (prod && prod.category) {
+                categoryCounts.set(prod.category, (categoryCounts.get(prod.category) || 0) + 1);
+            }
+        }
+
+        // Optimized approach using MinHeap
+        const heap = new MinHeap();
+        for (const [cat, count] of categoryCounts.entries()) {
+            heap.push({ key: cat, count });
+            if (heap.size() > k) heap.pop();
+        }
+
+        const topCategories = [];
+        while (heap.size() > 0) {
+            const item = heap.pop()!;
+            topCategories.push({ category: item.key, rentalCount: item.count });
+        }
+        topCategories.reverse(); // highest count first
+
+        return res.json({ userId: Number(userId), topCategories });
+
+    } catch (err) {
+        console.error("Error computing top categories:", err);
+        return res.status(500).json({ error: "Internal Server Error" });
+    }
+});
+
 app.use((_req, res) => {
 	res.status(404).send("Not Found");
 });

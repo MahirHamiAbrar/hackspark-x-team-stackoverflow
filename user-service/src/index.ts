@@ -18,6 +18,11 @@ const pool = new Pool({
 
 const jwtSecret = process.env.JWT_SECRET || 'supersecret';
 
+// Proxy targets for Central API
+// const TARGET_API_URL = "http://172.20.10.12:4000";
+const TARGET_API_URL = process.env.CENTRAL_API_URL || "https://technocracy.brittoo.xyz";
+const CENTRAL_API_TOKEN = process.env.CENTRAL_API_TOKEN;
+
 async function initDb() {
   await pool.query(`
     CREATE TABLE IF NOT EXISTS users (
@@ -112,6 +117,48 @@ app.get('/users/me', async (req, res) => {
     res.json(user);
   } catch (error) {
     res.status(401).json({ error: 'Unauthorized' });
+  }
+});
+
+// P6: The Loyalty Discount
+app.get('/users/:id/discount', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const response = await fetch(`${TARGET_API_URL}/api/data/users/${id}`, {
+      headers: {
+        'Authorization': `Bearer ${CENTRAL_API_TOKEN}`
+      }
+    });
+
+    if (response.status === 404) {
+      return res.status(404).json({ error: 'User not found in Central API' });
+    }
+
+    if (!response.ok) {
+      return res.status(response.status).json({ error: 'Failed to fetch user data from Central API' });
+    }
+
+    const result = await response.json();
+    const user = result.data || result;
+    
+    // Default to 100 or 0 if missing? The prompt says "compute their discount tier"
+    const securityScore = typeof user.securityScore === 'number' ? user.securityScore : 0;
+    
+    let discountPercent = 0;
+    if (securityScore >= 80) discountPercent = 20;
+    else if (securityScore >= 60) discountPercent = 15;
+    else if (securityScore >= 40) discountPercent = 10;
+    else if (securityScore >= 20) discountPercent = 5;
+    
+    return res.json({
+      userId: Number(id),
+      securityScore,
+      discountPercent
+    });
+
+  } catch (error) {
+    console.error("Error computing discount:", error);
+    return res.status(500).json({ error: 'Internal server error calculating discount' });
   }
 });
 
