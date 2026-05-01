@@ -1,1 +1,14 @@
-# Write your Dockerfile here
+FROM oven/bun:latest
+
+WORKDIR /app
+
+COPY package.json ./
+COPY bun.lockb ./
+
+RUN bun install --frozen-lockfile
+
+COPY . .
+
+EXPOSE 8000
+
+CMD ["bun", "run", "src/index.ts"]
