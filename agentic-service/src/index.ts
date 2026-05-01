@@ -1,6 +1,7 @@
 import express from "express";
 import { MongoClient, type Db } from "mongodb";
 import { v4 as uuidv4 } from "uuid";
+import { ChatGroq } from "@langchain/groq"
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 import { HumanMessage, AIMessage, SystemMessage } from "@langchain/core/messages";
 import { tool } from "@langchain/core/tools";
@@ -10,6 +11,7 @@ const serviceName = "agentic-service";
 const port = Number(process.env.PORT || 8004);
 const MONGO_URI = process.env.MONGO_URI || "mongodb://mongodb:27017/rentpi_agentic";
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "";
+const GROQ_API_KEY = process.env.GROQ_API_KEY || "";
 const CENTRAL_API_URL = process.env.CENTRAL_API_URL || "https://technocracy.brittoo.xyz";
 const CENTRAL_API_TOKEN = process.env.CENTRAL_API_TOKEN || "";
 const ANALYTICS_SERVICE_URL = process.env.ANALYTICS_SERVICE_URL || "http://analytics-service:8003";
@@ -225,12 +227,18 @@ const tools = [
 // ── LLM Setup ────────────────────────────────────────────────────────────────
 
 function createLLM() {
-  return new ChatGoogleGenerativeAI({
-    model: "gemini-2.0-flash",
-    apiKey: GEMINI_API_KEY,
+  return new ChatGroq({
+    model: "openai/gpt-oss-120b",
+    apiKey: GROQ_API_KEY,
     temperature: 0.3,
     maxRetries: 2,
   });
+  // return new ChatGoogleGenerativeAI({
+  //   model: "gemini-2.5-flash",
+  //   apiKey: GEMINI_API_KEY,
+  //   temperature: 0.3,
+  //   maxRetries: 2,
+  // });
 }
 
 const SYSTEM_PROMPT = `You are RentPi Assistant, an AI helper for the RentPi rental marketplace platform.
